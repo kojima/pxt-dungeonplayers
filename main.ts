@@ -437,13 +437,13 @@ game.onUpdate(function () {
     }
 })
 game.onUpdate(function () {
-    for (let 値 of sprites.allOfKind(SpriteKind.Trap)) {
-        if (!(sprites.readDataBoolean(値, "vanishing")) && game.runtime() - sprites.readDataNumber(値, "spawnedAt") > 8000) {
-            sprites.setDataBoolean(値, "visible", true)
-            sprites.setDataBoolean(値, "vanishing", true)
+    for (let 値2 of sprites.allOfKind(SpriteKind.Trap)) {
+        if (!(sprites.readDataBoolean(値2, "vanishing")) && game.runtime() - sprites.readDataNumber(値2, "spawnedAt") > 8000) {
+            sprites.setDataBoolean(値2, "visible", true)
+            sprites.setDataBoolean(値2, "vanishing", true)
         }
-        if (sprites.readDataBoolean(値, "vanishing") && game.runtime() - sprites.readDataNumber(値, "spawnedAt") > 10000) {
-            sprites.destroy(値)
+        if (sprites.readDataBoolean(値2, "vanishing") && game.runtime() - sprites.readDataNumber(値2, "spawnedAt") > 10000) {
+            sprites.destroy(値2)
         }
     }
 })
@@ -456,10 +456,10 @@ game.onUpdateInterval(50, function () {
         ボス.setFlag(SpriteFlag.Invisible, sprites.readDataBoolean(ボス, "visible"))
         sprites.setDataBoolean(ボス, "visible", !(sprites.readDataBoolean(ボス, "visible")))
     }
-    for (let 値 of sprites.allOfKind(SpriteKind.Trap)) {
-        if (sprites.readDataBoolean(値, "vanishing")) {
-            値.setFlag(SpriteFlag.Invisible, sprites.readDataBoolean(値, "visible"))
-            sprites.setDataBoolean(値, "visible", !(sprites.readDataBoolean(値, "visible")))
+    for (let 値3 of sprites.allOfKind(SpriteKind.Trap)) {
+        if (sprites.readDataBoolean(値3, "vanishing")) {
+            値3.setFlag(SpriteFlag.Invisible, sprites.readDataBoolean(値3, "visible"))
+            sprites.setDataBoolean(値3, "visible", !(sprites.readDataBoolean(値3, "visible")))
         }
     }
 })
