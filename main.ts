@@ -20,10 +20,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Trap, function (sprite, otherSpr
         statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -5
         music.play(music.createSoundEffect(WaveShape.Square, 571, 1, 255, 0, 400, SoundExpressionEffect.Vibrato, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
         scene.cameraShake(4, 500)
-        timer.after(2000, function () {
-            mySprite.setFlag(SpriteFlag.Invisible, false)
-            sprites.setDataBoolean(mySprite, "damaging", false)
-        })
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprite, otherSprite) {
@@ -33,10 +29,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprit
         statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -10
         music.play(music.createSoundEffect(WaveShape.Square, 571, 1, 255, 0, 400, SoundExpressionEffect.Vibrato, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
         scene.cameraShake(4, 500)
-        timer.after(2000, function () {
-            mySprite.setFlag(SpriteFlag.Invisible, false)
-            sprites.setDataBoolean(mySprite, "damaging", false)
-        })
     }
 })
 function 初期設定 () {
@@ -64,24 +56,6 @@ function ボス体当たり () {
     50,
     false
     )
-    timer.after(800, function () {
-        sprites.setDataNumber(ボス, "attackAngle", Math.atan2(mySprite.y - ボス.y, mySprite.x - ボス.x))
-        if (statusbars.getStatusBarAttachedTo(StatusBarKind.Health, ボス).value > 50) {
-            sprites.setDataNumber(ボス, "speed", 150)
-        } else {
-            if (statusbars.getStatusBarAttachedTo(StatusBarKind.Health, ボス).value > 20) {
-                sprites.setDataNumber(ボス, "speed", 200)
-            } else {
-                sprites.setDataNumber(ボス, "speed", 250)
-            }
-        }
-        ボス.setVelocity(sprites.readDataNumber(ボス, "speed") * Math.cos(sprites.readDataNumber(ボス, "attackAngle")), sprites.readDataNumber(ボス, "speed") * Math.sin(sprites.readDataNumber(ボス, "attackAngle")))
-        music.play(music.createSoundEffect(WaveShape.Noise, 619, 2168, 90, 255, 400, SoundExpressionEffect.Tremolo, InterpolationCurve.Curve), music.PlaybackMode.InBackground)
-    })
-    timer.after(1500, function () {
-        sprites.setDataBoolean(ボス, "dushing", false)
-        ボス.setVelocity(0, 0)
-    })
 }
 statusbars.onStatusReached(StatusBarKind.Health, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 50, function (status) {
     status.setColor(4, 1)
@@ -116,10 +90,6 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.Enemy, function (sprite, otherSpr
         sprites.setDataBoolean(ボス, "visible", true)
         statusbars.getStatusBarAttachedTo(StatusBarKind.Health, otherSprite).value += -10
         music.play(music.createSoundEffect(WaveShape.Noise, 3929, 3163, 255, 0, 500, SoundExpressionEffect.Tremolo, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
-        timer.after(2000, function () {
-            ボス.setFlag(SpriteFlag.Invisible, false)
-            sprites.setDataBoolean(ボス, "damaging", false)
-        })
     }
 })
 function ボス飛び道具生成 () {
@@ -136,56 +106,6 @@ function ボス飛び道具生成 () {
     50,
     false
     )
-    timer.after(800, function () {
-        if (statusbars.getStatusBarAttachedTo(StatusBarKind.Health, ボス).value > 50) {
-            sprites.setDataNumber(ボス, "prjSpeed", 80)
-            sprites.setDataNumber(ボス, "prjCount", 8)
-            sprites.setDataNumber(ボス, "prjA", 0)
-        } else {
-            if (statusbars.getStatusBarAttachedTo(StatusBarKind.Health, ボス).value > 20) {
-                sprites.setDataNumber(ボス, "prjSpeed", 100)
-                sprites.setDataNumber(ボス, "prjCount", 8)
-                sprites.setDataNumber(ボス, "prjA", 200)
-            } else {
-                sprites.setDataNumber(ボス, "prjSpeed", 120)
-                sprites.setDataNumber(ボス, "prjCount", 8)
-                sprites.setDataNumber(ボス, "prjA", 400)
-            }
-        }
-        music.play(music.createSoundEffect(WaveShape.Sine, 1, 1045, 54, 255, 500, SoundExpressionEffect.Warble, InterpolationCurve.Curve), music.PlaybackMode.InBackground)
-        for (let カウンター = 0; カウンター <= sprites.readDataNumber(ボス, "prjCount") - 1; カウンター++) {
-            eProjectile = sprites.create(img`
-                . . . . . . . . . . . . 
-                . . . . 6 6 6 6 . . . . 
-                . . 6 6 1 1 1 9 f f . . 
-                . . 6 1 1 9 9 9 6 f . . 
-                . 6 9 9 9 9 9 9 9 6 f . 
-                . 6 1 9 9 9 9 9 9 6 f . 
-                . 6 9 9 9 9 9 9 9 6 f . 
-                . 6 9 9 9 9 9 9 6 6 f . 
-                . . 6 9 9 9 9 6 6 f . . 
-                . . 6 6 6 6 6 6 f f . . 
-                . . . . f f f f . . . . 
-                . . . . . . . . . . . . 
-                `, SpriteKind.EnemyProjectile)
-            eProjectile.z = 5
-            sprites.setDataNumber(eProjectile, "accelaration", sprites.readDataNumber(ボス, "prjA"))
-            eProjectile.setPosition(ボス.x, ボス.y)
-            eProjectile.setFlag(SpriteFlag.AutoDestroy, false)
-            eProjectile.setFlag(SpriteFlag.DestroyOnWall, false)
-            eProjectile.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sprites.setDataNumber(eProjectile, "angle", 1.57 + 6.28 * (カウンター / sprites.readDataNumber(ボス, "prjCount")))
-            eProjectile.ax = sprites.readDataNumber(ボス, "prjA") * Math.cos(sprites.readDataNumber(eProjectile, "angle"))
-            eProjectile.ay = sprites.readDataNumber(ボス, "prjA") * Math.sin(sprites.readDataNumber(eProjectile, "angle"))
-            eProjectile.setVelocity(sprites.readDataNumber(ボス, "prjSpeed") * Math.cos(6.28 * (カウンター / sprites.readDataNumber(ボス, "prjCount"))), sprites.readDataNumber(ボス, "prjSpeed") * Math.sin(6.28 * (カウンター / sprites.readDataNumber(ボス, "prjCount"))))
-        }
-    })
-    timer.after(1500, function () {
-        sprites.setDataBoolean(ボス, "attacking", false)
-    })
-    timer.after(3000, function () {
-        sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
-    })
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (!(sprites.readDataBoolean(mySprite, "damaging"))) {
@@ -198,10 +118,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         }
         music.play(music.createSoundEffect(WaveShape.Square, 571, 1, 255, 0, 400, SoundExpressionEffect.Vibrato, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
         scene.cameraShake(4, 500)
-        timer.after(2000, function () {
-            mySprite.setFlag(SpriteFlag.Invisible, false)
-            sprites.setDataBoolean(mySprite, "damaging", false)
-        })
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -275,7 +191,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 let mySprite2: Sprite = null
-let eProjectile: Sprite = null
 let 敵HP: StatusBarSprite = null
 let ボス: Sprite = null
 let プレイヤーHP: StatusBarSprite = null

@@ -6,8 +6,7 @@
         "device": "*",
         "animation": "*",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
-        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1",
-        "Timers": "github:microsoft/arcade-timers#v1.1.0"
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1"
     },
     "files": [
         "main.blocks",
@@ -34,7 +33,7 @@
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "blocksprj",
+    "preferredEditor": "tsprj",
     "palette": [
         "#000000",
         "#FFFFFF",
